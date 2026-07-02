@@ -456,7 +456,11 @@ body::before {
           </div>
         </div>
       </div>
-      <button class="btn btn-primary" onclick="startStudy()" style="width:100%;justify-content:center;">Bắt đầu học</button>
+      <div class="config-group">
+        <div class="config-label">Bắt đầu từ câu số (Mã đề cương)</div>
+        <input type="number" id="studyStartNum" class="search-input" style="padding: 10px 16px; border-radius: var(--radius-sm); width: 100%;" placeholder="Ví dụ: 50 hoặc để trống để học từ đầu..." min="1">
+      </div>
+      <button class="btn btn-primary" onclick="startStudy()" style="width:100%;justify-content:center;margin-top:8px;">Bắt đầu học</button>
     </div>
   </div>
 
@@ -716,7 +720,19 @@ function startStudy() {
     alert("Không tìm thấy câu hỏi phù hợp với cấu hình của bạn.");
     return;
   }
+  
   currentIdx = 0;
+  const startNumVal = document.getElementById("studyStartNum").value.trim();
+  if (startNumVal !== "") {
+    const startNum = parseInt(startNumVal);
+    const foundIdx = activeQuestions.findIndex(q => q.id === startNum);
+    if (foundIdx > -1) {
+      currentIdx = foundIdx;
+    } else {
+      alert(`Không tìm thấy câu ${startNum} trong chương đã chọn. Hệ thống sẽ bắt đầu từ câu đầu tiên.`);
+    }
+  }
+
   showPage('study');
   renderStudyQuestion();
 }
@@ -1113,8 +1129,14 @@ function doSearch() {
     item.className = "search-item";
     item.onclick = () => {
       currentMode = 'study';
-      activeQuestions = [q];
-      currentIdx = 0;
+      const idx = ALL_QUESTIONS.findIndex(item => item.id === q.id);
+      if (idx > -1) {
+        activeQuestions = [...ALL_QUESTIONS];
+        currentIdx = idx;
+      } else {
+        activeQuestions = [q];
+        currentIdx = 0;
+      }
       showPage('study');
       renderStudyQuestion();
     };
