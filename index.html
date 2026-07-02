@@ -392,6 +392,9 @@ body::before {
       <div class="stat-card"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">Streak</div></div>
       <div class="stat-card"><div class="stat-value" id="stat-wrong">0</div><div class="stat-label">Câu sai</div></div>
     </div>
+    <div style="text-align: center; margin-top: -12px; margin-bottom: 24px;">
+      <button class="btn btn-secondary btn-sm" onclick="confirmReset()" style="border-radius: 20px; font-size: 12px; padding: 6px 16px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">🔄 Reset & Học lại từ đầu</button>
+    </div>
     <div class="mode-grid">
       <div class="mode-card" onclick="startStudyConfig()">
         <span class="mode-icon">📖</span>
@@ -459,6 +462,10 @@ body::before {
       <div class="config-group">
         <div class="config-label">Bắt đầu từ câu số (Mã đề cương)</div>
         <input type="number" id="studyStartNum" class="search-input" style="padding: 10px 16px; border-radius: var(--radius-sm); width: 100%;" placeholder="Ví dụ: 50 hoặc để trống để học từ đầu..." min="1">
+      </div>
+      <div class="config-group" style="display: flex; align-items: center; gap: 8px; margin-top: 16px; margin-bottom: 16px;">
+        <input type="checkbox" id="studyResetOption" style="width: 18px; height: 18px; cursor: pointer;">
+        <label for="studyResetOption" style="font-size: 13.5px; color: var(--text-secondary); cursor: pointer; user-select: none;">Xóa lịch sử trả lời cũ để làm lại từ đầu chương này</label>
       </div>
       <button class="btn btn-primary" onclick="startStudy()" style="width:100%;justify-content:center;margin-top:8px;">Bắt đầu học</button>
     </div>
@@ -721,6 +728,25 @@ function startStudy() {
     return;
   }
   
+  // Reset tiến trình của những câu hỏi trong chương được chọn
+  const shouldReset = document.getElementById("studyResetOption").checked;
+  if (shouldReset) {
+    activeQuestions.forEach(q => {
+      delete userProgress[q.id];
+      userWrongList = userWrongList.filter(id => id !== q.id);
+    });
+    localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(userProgress));
+    localStorage.setItem(STORAGE_KEYS.wrong, JSON.stringify(userWrongList));
+    
+    // Cập nhật lại thống kê
+    userStats.done = Object.keys(userProgress).length;
+    localStorage.setItem(STORAGE_KEYS.stats, JSON.stringify(userStats));
+    updateStatsUI();
+    updateBadges();
+    
+    document.getElementById("studyResetOption").checked = false;
+  }
+
   currentIdx = 0;
   const startNumVal = document.getElementById("studyStartNum").value.trim();
   if (startNumVal !== "") {
@@ -1244,6 +1270,22 @@ function updateStatsUI() {
 function updateBadges() {
   document.getElementById("wrong-badge").textContent = userWrongList.length + " câu";
   document.getElementById("bookmark-badge").textContent = userBookmarks.length + " câu";
+}
+
+function confirmReset() {
+  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử trả lời và thống kê để học lại từ đầu không? (Các câu hỏi đã lưu/bookmark vẫn được giữ nguyên)")) {
+    userProgress = {};
+    userWrongList = [];
+    userStats = {done: 0, correct: 0, streak: 0, wrong: 0};
+    
+    localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(userProgress));
+    localStorage.setItem(STORAGE_KEYS.wrong, JSON.stringify(userWrongList));
+    localStorage.setItem(STORAGE_KEYS.stats, JSON.stringify(userStats));
+    
+    updateStatsUI();
+    updateBadges();
+    alert("Đã reset toàn bộ tiến trình trả lời. Bạn có thể bắt đầu học lại từ đầu!");
+  }
 }
 
 function resetAllData() {
