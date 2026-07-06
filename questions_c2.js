@@ -126,5 +126,3 @@ const QUESTIONS_C2 = [
   {"id": 227, "chapter": "CHƯƠNG 2", "question": "Câu 125. Điểm khác biệt lớn nhất của chiến dịch Hồ Chí Minh 1975 so với chiến dịch Điện Biên Phủ 1954 là?", "options": ["A. Có sự kết hợp tiến công quân sự và nổi dậy của quần chúng", "B. Buộc địch phải đầu hàng không điều kiện", "C. Sử dụng nhiều binh chủng hợp thành quy mô lớn", "D. Giành thắng lợi triệt để trong thời gian ngắn"], "answer": 2, "explanation": "Chiến dịch Hồ Chí Minh sử dụng nghệ thuật đánh thần tốc, táo bạo, chắc thắng tiêu diệt gọn quân địch thay vì đánh chắc tiến chắc lâu dài (trang 81, 111)."},
   {"id": 228, "chapter": "CHƯƠNG 2", "question": "Câu 126. Trong 21 năm thực hiện chiến tranh ở Việt Nam (1954-1975), Mỹ đã sử dụng mấy chiến lược chiến tranh?", "options": ["A. 2", "B. 3", "C. 4", "D. 5"], "answer": 2, "explanation": "Mỹ đã áp dụng liên tiếp 4 chiến lược thực dân mới ở miền Nam: Đơn phương, Đặc biệt, Cục bộ, Việt Nam hóa chiến tranh (trang 95, 98, 107)."}
 ];
-
-export default QUESTIONS_C2;

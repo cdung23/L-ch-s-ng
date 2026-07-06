@@ -133,5 +133,3 @@ const QUESTIONS_C3 = [
   {"id": 361, "chapter": "CHƯƠNG 3", "question": "Câu 131. Đại hội đại biểu toàn quốc lần thứ XIII của Đảng (2021) xác định hoàn thiện hệ thống pháp luật, nhất là pháp luật về?", "options": ["A. Sở hữu trí tuệ", "B. Các tranh chấp dân sự", "C. Sở hữu trí tuệ và các tranh chấp dân sự", "D. Hợp đồng kinh doanh và đầu tư"], "answer": 2, "explanation": "Đại hội XIII chỉ đạo khẩn trương hoàn thiện pháp luật về sở hữu trí tuệ và giải quyết hiệu quả các tranh chấp dân sự."},
   {"id": 362, "chapter": "CHƯƠNG 3", "question": "Câu 132. Đại hội đại biểu toàn quốc lần thứ XIII của Đảng (2021) xác định phát triển nguồn nhân lực, nhất là nguồn nhân lực chất lượng cao, trong đó ưu tiên phát triển nguồn nhân lực cho?", "options": ["A. Các ngành kinh tế mũi nhọn", "B. Nghiên cứu khoa học kỹ thuật", "C. Giáo dục và y tế", "D. Công tác lãnh đạo, quản lý và các lĩnh vực then chốt"], "answer": 3, "explanation": "Đại hội XIII chủ trương ưu tiên phát triển nguồn nhân lực chất lượng cao cho công tác lãnh đạo, quản lý và then chốt."}
 ];
-
-export default QUESTIONS_C3;
