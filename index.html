@@ -623,6 +623,7 @@ let examChapters = ['all'];
 let examCount = 40;
 let examTime = 40; // phút
 let examAnswers = {}; // idx -> optionIdx
+let reviewProgress = {}; // q.id -> optionIdx
 let examFlags = {}; // idx -> bool
 let examTimerInterval = null;
 let examTimeRemaining = 0;
@@ -770,7 +771,9 @@ function renderStudyQuestion() {
   document.getElementById("studyProgressText").textContent = `${currentIdx + 1}/${activeQuestions.length}`;
   document.getElementById("studyTitle").textContent = `Ôn tập: ${q.chapter || 'Lịch sử Đảng'}`;
 
-  const hasAnswered = userProgress[q.id] !== undefined;
+  const isReviewMode = currentMode === 'wrong' || currentMode === 'bookmark';
+  const hasAnswered = isReviewMode ? (reviewProgress[q.id] !== undefined) : (userProgress[q.id] !== undefined);
+  const selectedAnswer = isReviewMode ? reviewProgress[q.id] : userProgress[q.id];
   const isBookmarked = userBookmarks.includes(q.id);
   
   const bookmarkBtn = document.getElementById("studyBookmark");
@@ -787,7 +790,7 @@ function renderStudyQuestion() {
     let btnClass = '';
     if (hasAnswered) {
       if (idx === q.answer) btnClass = 'correct disabled';
-      else if (idx === userProgress[q.id] && idx !== q.answer) btnClass = 'wrong disabled';
+      else if (idx === selectedAnswer && idx !== q.answer) btnClass = 'wrong disabled';
       else btnClass = 'disabled';
     }
     optionsHTML += `
@@ -826,6 +829,12 @@ function renderStudyQuestion() {
 function selectStudyOption(btn, optionIdx) {
   if (btn.classList.contains("disabled")) return;
   const q = activeQuestions[currentIdx];
+  const isReviewMode = currentMode === 'wrong' || currentMode === 'bookmark';
+  
+  if (isReviewMode) {
+    reviewProgress[q.id] = optionIdx;
+  }
+  
   userProgress[q.id] = optionIdx;
   localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(userProgress));
 
@@ -879,6 +888,7 @@ function startReviewWrong() {
     return;
   }
   currentMode = 'wrong';
+  reviewProgress = {};
   activeQuestions = ALL_QUESTIONS.filter(q => userWrongList.includes(q.id));
   currentIdx = 0;
   showPage('study');
@@ -892,6 +902,7 @@ function startBookmarked() {
     return;
   }
   currentMode = 'bookmark';
+  reviewProgress = {};
   activeQuestions = ALL_QUESTIONS.filter(q => userBookmarks.includes(q.id));
   currentIdx = 0;
   showPage('study');
